@@ -20,7 +20,7 @@ public class PropertiesUtil {
 	public static String JDBCDriver="JDBCDriver";
 	public static String CountryCode="CountryCode";
 	public static String LanguageCode="LanguageCode";
-	public static String Impresora="Impresora";
+	//public static String Impresora="Impresora";
 	public static String reportsPath="reportsPath";
 	
 

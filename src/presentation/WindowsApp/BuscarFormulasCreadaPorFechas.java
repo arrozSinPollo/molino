@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -43,6 +42,11 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.toedter.calendar.JDateChooser;
+
+import dal.DalException;
+import dal.Transactionable;
+import domain.Formula;
 import mysqldal.MySQLFormulaDal;
 import mysqldal.MySQLJDBCFacade;
 import net.sf.jasperreports.engine.JRException;
@@ -56,12 +60,6 @@ import presentation.PresentationApp;
 import utils.MyTableModel;
 import utils.PropertiesUtil;
 
-import com.toedter.calendar.JDateChooser;
-
-import dal.DalException;
-import dal.Transactionable;
-import domain.Formula;
-
 public class BuscarFormulasCreadaPorFechas extends Transactionable implements PresentationApp {
 
 	private JDateChooser jDateChooserFecha;
@@ -71,7 +69,7 @@ public class BuscarFormulasCreadaPorFechas extends Transactionable implements Pr
 	private JButton jButtonCancelFormula;
 	private JButton jButtonModifyFormula;
 	private JButton jButtonCancelDetail;
-	private JLabel jLabel3;
+	private JLabel jLabel3; 
 	private JTable jTableDetails;
 	private JScrollPane jTableScroller;
 	private DefaultTableModel jTableDetailsModel;
@@ -501,20 +499,6 @@ public class BuscarFormulasCreadaPorFechas extends Transactionable implements Pr
 			}
 		});
 		
-		//Imprimir fórmula seleccionada
-		jButtonImprimir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				jButtonImprimirActionPerformed(evt);
-			}
-		});
-		
-		//Imprimir lista de fórmulas encontradas en la búsqueda
-		jButtonImprimirLista.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				jButtonImprimirListaActionPerformed(evt);
-			}
-		});
-		
 		//Controlar que no este los dos CheckBox activados a la vez
 		jCheckBoxEnvasado.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent evt) {
@@ -677,25 +661,12 @@ public class BuscarFormulasCreadaPorFechas extends Transactionable implements Pr
 	    	jasperReport = JasperCompileManager.compileReport(properties.getProperty(PropertiesUtil.reportsPath) + reportNameListFormulas);
             
 	        //2-Llenamos el reporte con la información y parámetros necesarios (En este caso nada)
-	    	System.out.println("2-Llenamos el reporte con la información y parámetros necesarios");	        
+	    	System.out.println("2-Llenamos el reporte con la información y parámetros necesarios");
 	        jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, ds);
 
 	        //3-Mostramos el resultado si todo ha ido bien.
    	        JasperViewer.viewReport(jasperPrint,false);
    	        
-   	        
-   	        
-	        /*JFileChooser filechooser = new JFileChooser();
-	        JFrame frame = new JFrame();
-            int returnVal = filechooser.showSaveDialog(frame);
-
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-            	File file = filechooser.getSelectedFile();
-//            	3-Exportamos el reporte a pdf y lo guardamos en disco
-    	        System.out.println("3-Exportamos el reporte a pdf y lo guardamos en disco: " + file.getName());
-    	        JasperExportManager.exportReportToPdfFile(jasperPrint, file.getName());
-            } */
-	        
 	    }
 	    catch (Exception e)
 	    {
@@ -802,25 +773,12 @@ public class BuscarFormulasCreadaPorFechas extends Transactionable implements Pr
            
             //2-Llenamos el reporte con la información y parámetros necesarios (En este caso nada)
 	    	logger.info("Llenamos el reporte con la información y parámetros necesarios");
-	    	System.out.println("2-Llenamos el reporte con la información y parámetros necesarios");	        
+	    	System.out.println("2-Llenamos el reporte con la información y parámetros necesarios");
 	        jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, ds);
 
 	        //3-Mostramos el resultado si todo ha ido bien.
 	        logger.info("Visualizamos el informe");
    	        JasperViewer.viewReport(jasperPrint,false);
-   	        
-   	        
-   	        
-	        /*JFileChooser filechooser = new JFileChooser();
-	        JFrame frame = new JFrame();
-            int returnVal = filechooser.showSaveDialog(frame);
-
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-            	File file = filechooser.getSelectedFile();
-//            	3-Exportamos el reporte a pdf y lo guardamos en disco
-    	        System.out.println("3-Exportamos el reporte a pdf y lo guardamos en disco: " + file.getName());
-    	        JasperExportManager.exportReportToPdfFile(jasperPrint, file.getName());
-            } */
 	        
 	    }
 	    catch (JRException e)
@@ -942,7 +900,7 @@ public class BuscarFormulasCreadaPorFechas extends Transactionable implements Pr
 		Object[][] data = null;
 		Object[] headers = new Object[] {"ID", "TIPO_DE_FÓRMULA", "TIPO_DE_GANADO"};
 		
-		return new DefaultTableModel(data,headers);
+		return new DefaultTableModel(data,headers); 
 	}
 	
 	private void cargarTableBusqueda() throws SQLException, DalException{
@@ -953,7 +911,7 @@ public class BuscarFormulasCreadaPorFechas extends Transactionable implements Pr
 		// Limpiamos la tabla de fórmulas buscadas
 		jTableBusquedaModel = initTableBusquedaModel();
 		
-		// Limpiamos el resto de campos
+		// Limpiamos el resto de campos 
 		jButtonImprimir.setVisible(false);
 		this.jTextFieldFormula.setText("");
 		this.jTextFieldTipo.setText("");
@@ -1059,6 +1017,13 @@ public class BuscarFormulasCreadaPorFechas extends Transactionable implements Pr
 			jButtonImprimir = new JButton();
 			jButtonImprimir.setText("Imprimir Fórmula Seleccionada");
 			jButtonImprimir.setVisible(false);
+			//Imprimir fórmula seleccionada
+			jButtonImprimir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					jButtonImprimirActionPerformed(evt);
+				}
+			});
+			
 		}
 		return jButtonImprimir;
 	}
@@ -1068,6 +1033,12 @@ public class BuscarFormulasCreadaPorFechas extends Transactionable implements Pr
 			jButtonImprimirLista = new JButton();
 			jButtonImprimirLista.setText("Imprimir Fórmulas Encontradas");
 			jButtonImprimirLista.setVisible(false);
+			//Imprimir lista de fórmulas encontradas en la búsqueda
+			jButtonImprimirLista.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					jButtonImprimirListaActionPerformed(evt);
+				}
+			});
 		}
 		return jButtonImprimirLista;
 	}
